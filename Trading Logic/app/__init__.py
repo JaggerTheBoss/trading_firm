@@ -3,14 +3,11 @@ from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
 import logging
 from config import Config
+from .utils.scheduler import init_scheduler
+from .Trading_Logic.futures_service import init_futures_client  # Adjusted path
 
-# Define db first
 db = SQLAlchemy()
 socketio = SocketIO(cors_allowed_origins="*")
-
-# Now import modules that use db
-from .utils.scheduler import init_scheduler
-from .services.futures_service import init_futures_client
 
 def create_app():
     app = Flask(__name__)
