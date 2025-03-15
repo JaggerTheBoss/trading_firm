@@ -17,16 +17,16 @@ def create_app():
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-    from Trading_Logic.routes.accounts import accounts_bp
-    from Trading_Logic.routes.trades import trades_bp
-    from Trading_Logic.routes.stats import stats_bp
+    from .Trading_Logic.routes.accounts import accounts_bp
+    from .Trading_Logic.routes.trades import trades_bp
+    from .Trading_Logic.routes.stats import stats_bp
     app.register_blueprint(accounts_bp, url_prefix='/api')
     app.register_blueprint(trades_bp, url_prefix='/api')
     app.register_blueprint(stats_bp, url_prefix='/api')
 
     with app.app_context():
-        from Trading_Logic.utils.scheduler import init_scheduler
-        from Trading_Logic.futures_service import init_futures_client
+        from .Trading_Logic.utils.scheduler import init_scheduler
+        from .Trading_Logic.futures_service import init_futures_client
         db.create_all()
         init_scheduler(app, socketio)
         init_futures_client(socketio)
