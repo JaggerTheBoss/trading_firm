@@ -25,24 +25,25 @@
         <section class="py-20">
             <h2 class="text-5xl font-bold text-center mb-12">Your Trading Dashboard</h2>
             <p class="text-center text-2xl text-gray-300 mb-12">Welcome, <span id="user-handle" class="text-green-400">@Legend</span></p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-gray-800 p-8 rounded-xl shadow-lg">
                     <h3 class="text-2xl font-semibold mb-4">Account Overview</h3>
-                    <p class="text-gray-300">Active Accounts: <span class="text-green-400">3 ($150K, $100K, $50K)</span></p>
-                    <p class="text-gray-300">Total Balance: <span class="text-green-400">$18,450</span></p>
-                    <p class="text-gray-300">Winning Days: <span class="text-green-400">5/7</span></p>
+                    <p class="text-gray-300">Total Balance: $<span id="user-balance" class="text-green-400">0</span></p>
+                    <p class="text-gray-300 mt-2">Active Accounts: <span id="active-accounts" class="text-green-400">0</span></p>
+                    <ul id="account-list" class="text-gray-300 mt-2 space-y-1"></ul>
                 </div>
                 <div class="bg-gray-800 p-8 rounded-xl shadow-lg">
-                    <h3 class="text-2xl font-semibold mb-4">Trade Stats</h3>
-                    <p class="text-gray-300">Total Trades: <span class="text-green-400">142</span></p>
-                    <p class="text-gray-300">Win Rate: <span class="text-green-400">68%</span></p>
-                    <p class="text-gray-300">Avg. Profit/Day: <span class="text-green-400">$1,230</span></p>
-                </div>
-                <div class="bg-gray-800 p-8 rounded-xl shadow-lg">
-                    <h3 class="text-2xl font-semibold mb-4">Tilt Indicator</h3>
-                    <p class="text-gray-300">Long Bias: <span class="text-green-400">62%</span></p>
-                    <p class="text-gray-300">Short Bias: <span class="text-red-400">38%</span></p>
-                    <p class="text-gray-300">Updated: <span class="text-gray-400">Now</span></p>
+                    <h3 class="text-2xl font-semibold mb-4">Buy Accounts</h3>
+                    <div class="mb-4">
+                        <label class="block text-gray-300 mb-2">Select Account Size</label>
+                        <select id="account-size" class="w-full p-3 rounded bg-gray-700 border border-gray-600 text-white">
+                            <option value="50">$50K - $250</option>
+                            <option value="100">$100K - $300</option>
+                            <option value="150">$150K - $350</option>
+                        </select>
+                        <button id="buy-account" class="mt-2 w-full bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600">Buy Now</button>
+                    </div>
+                    <p class="text-gray-300">Ready to trade? <a href="../Trading/index.html" class="text-green-400 hover:underline">Go to Trading Platform</a></p>
                 </div>
             </div>
         </section>

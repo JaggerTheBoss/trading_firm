@@ -81,7 +81,7 @@ if (document.getElementById('signup-form')) {
             return;
         }
 
-        const newUser = { email, password, handle, balance: 0, trades: [] };
+        const newUser = { email, password, handle, balance: 10000, trades: [], accounts: [] };
         users.push(newUser);
         localStorage.setItem('users', JSON.stringify(users));
         localStorage.setItem('currentUser', JSON.stringify(newUser));
@@ -108,12 +108,71 @@ if (document.getElementById('login-form')) {
     });
 }
 
-// Dashboard & Profile Display
-if (document.getElementById('user-handle')) {
+// Dashboard Display & Account Buying
+if (document.getElementById('user-handle') && window.location.pathname.includes('dashboard.html')) {
     if (!currentUser) {
         window.location.href = 'login.html';
     } else {
         document.getElementById('user-handle').textContent = currentUser.handle;
+        document.getElementById('user-balance').textContent = currentUser.balance;
+        document.getElementById('active-accounts').textContent = currentUser.accounts.length;
+        const accountList = document.getElementById('account-list');
+        accountList.innerHTML = currentUser.accounts.length 
+            ? currentUser.accounts.map(a => `<li>$${a.size}K (Bought: ${new Date(a.purchased).toLocaleDateString()})</li>`).join('') 
+            : '<li>No accounts yet</li>';
+
+        document.getElementById('buy-account').addEventListener('click', () => {
+            const size = parseInt(document.getElementById('account-size').value);
+            const costs = { 50: 250, 100: 300, 150: 350 };
+            const cost = costs[size];
+            if (currentUser.balance < cost) {
+                alert('Not enough balance to buy this account!');
+                return;
+            }
+            if (currentUser.accounts.length >= 5) {
+                alert('Max 5 accounts allowed!');
+                return;
+            }
+            currentUser.balance -= cost;
+            currentUser.accounts.push({ size, purchased: new Date().toISOString() });
+            updateUserData();
+            alert(`Bought a $${size}K account for $${cost}!`);
+            document.getElementById('user-balance').textContent = currentUser.balance;
+            document.getElementById('active-accounts').textContent = currentUser.accounts.length;
+            accountList.innerHTML = currentUser.accounts.map(a => `<li>$${a.size}K (Bought: ${new Date(a.purchased).toLocaleDateString()})</li>`).join('');
+        });
+    }
+}
+
+// Profile Display & Edit
+if (document.getElementById('user-email')) {
+    if (!currentUser) {
+        window.location.href = 'login.html';
+    } else {
+        document.getElementById('user-email').textContent = currentUser.email;
+        document.getElementById('user-handle').textContent = currentUser.handle;
+        document.getElementById('user-balance').textContent = currentUser.balance;
+        const tradeList = document.getElementById('trade-history');
+        tradeList.innerHTML = currentUser.trades.length 
+            ? currentUser.trades.map(t => `<li>${t.contract} - $${t.profit.toFixed(2)} (${new Date(t.date).toLocaleDateString()})</li>`).join('') 
+            : '<li>No trades yet</li>';
+
+        document.getElementById('edit-handle-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newHandle = document.getElementById('new-handle').value.trim();
+            if (!newHandle || newHandle === currentUser.handle) return;
+            if (users.some(u => u.handle === newHandle && u.email !== currentUser.email)) {
+                alert('Handle already taken');
+                return;
+            }
+            const userIndex = users.findIndex(u => u.email === currentUser.email);
+            users[userIndex].handle = newHandle;
+            currentUser.handle = newHandle;
+            updateUserData();
+            document.getElementById('user-handle').textContent = newHandle;
+            alert('Handle updated to ' + newHandle);
+            document.getElementById('new-handle').value = '';
+        });
     }
 }
 
@@ -125,4 +184,12 @@ if (document.getElementById('logout-link')) {
         alert('Logged out successfully');
         window.location.href = 'login.html';
     });
+}
+
+// Helper Function
+function updateUserData() {
+    const userIndex = users.findIndex(u => u.email === currentUser.email);
+    users[userIndex] = { ...currentUser };
+    localStorage.setItem('users', JSON.stringify(users));
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
 }
