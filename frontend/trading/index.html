@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Platform - LiveTrade Legends</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lightweight-charts@4.1.7/dist/lightweight-charts.standalone.production.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        main {
+            height: calc(100% - 64px);
+        }
+        #nq-chart {
+            min-height: 600px;
+            min-width: 800px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <header class="fixed w-full z-50 bg-gray-900 py-2 h-16">
+        <div class="max-w-7xl mx-auto flex justify-between items-center px-4">
+            <h1 class="text-xl font-bold text-green-400">LiveTrade Legends | Trading</h1>
+            <div class="flex items-center gap-4 text-sm">
+                <span>Balance: $<span id="user-balance">0</span></span>
+                <span>Realized P&L: $<span id="realized-pnl">0</span></span>
+                <span>Unrealized P&L: $<span id="unrealized-pnl">0</span></span>
+            </div>
+            <ul class="flex gap-4">
+                <li><a href="index.html" class="text-green-400">Trade</a></li>
+                <li><a href="trades.html" class="hover:text-green-400">Trade History</a></li>
+                <li><a href="http://localhost:8000/dashboard.html" class="hover:text-green-400">Dashboard</a></li>
+                <li><a href="#" id="logout-link" class="hover:text-green-400">Logout</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main class="pt-16 h-screen flex">
+        <div class="flex-1 p-4">
+            <div class="flex justify-between items-center mb-2">
+                <h2 class="text-lg font-semibold">NQH25 (Nasdaq Futures)</h2>
+                <div class="flex gap-2 text-sm">
+                    <button class="timeframe-btn bg-gray-700 px-2 py-1 rounded" data-interval="1m">1m</button>
+                    <button class="timeframe-btn bg-gray-700 px-2 py-1 rounded" data-interval="5m">5m</button>
+                    <button class="timeframe-btn bg-gray-700 px-2 py-1 rounded" data-interval="15m">15m</button>
+                    <button class="timeframe-btn bg-gray-700 px-2 py-1 rounded" data-interval="30m">30m</button>
+                    <button class="timeframe-btn bg-gray-700 px-2 py-1 rounded" data-interval="1h">1h</button>
+                </div>
+            </div>
+            <div id="nq-chart" class="w-full h-[calc(100vh-150px)] rounded-lg border border-gray-600"></div>
+        </div>
+
+        <div class="w-64 bg-gray-800 p-4 flex flex-col gap-4">
+            <h3 class="text-lg font-semibold">Place Order</h3>
+            <div class="flex flex-col gap-2">
+                <label class="text-sm">Contract</label>
+                <select id="trade-contract" class="p-2 bg-gray-700 rounded">
+                    <option value="Nasdaq Micro">Nasdaq Micro</option>
+                    <option value="E-mini S&P">E-mini S&P</option>
+                </select>
+            </div>
+            <div class="flex flex-col gap-2">
+                <label class="text-sm">Order Type</label>
+                <select id="order-type" class="p-2 bg-gray-700 rounded">
+                    <option value="market">Market</option>
+                    <option value="limit">Limit</option>
+                </select>
+            </div>
+            <div class="flex flex-col gap-2">
+                <label class="text-sm"># of Contracts</label>
+                <input type="number" id="trade-amount" value="1" min="1" class="p-2 bg-gray-700 rounded">
+            </div>
+            <div class="flex gap-2">
+                <button id="buy-btn" class="flex-1 bg-green-500 py-2 rounded hover:bg-green-600">Buy</button>
+                <button id="sell-btn" class="flex-1 bg-red-500 py-2 rounded hover:bg-red-600">Sell</button>
+            </div>
+            <div class="text-sm text-gray-400">
+                <p>Position: <span id="current-position">None</span></p>
+                <p>Unrealized P&L: $<span id="unrealized-pnl-panel">0</span></p>
+            </div>
+            <button id="close-position" class="bg-gray-600 py-2 rounded hover:bg-gray-500">Close Position</button>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
