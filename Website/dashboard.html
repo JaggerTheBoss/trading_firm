@@ -14,40 +14,34 @@
             <ul class="flex gap-8" id="nav-links">
                 <li><a href="index.html" class="hover:text-green-400">Home</a></li>
                 <li><a href="dashboard.html" class="text-green-400">Dashboard</a></li>
-                <li><a href="learn.html" class="hover:text-green-400">Learn</a></li>
-                <li><a href="suggest.html" class="hover:text-green-400">Suggest</a></li>
                 <li><a href="profile.html" class="hover:text-green-400">Profile</a></li>
+                <li><a href="http://localhost:8001/index.html" class="hover:text-green-400">Trading</a></li>
                 <li><a href="#" id="logout-link" class="hover:text-green-400">Logout</a></li>
             </ul>
         </nav>
     </header>
     <main class="pt-24 max-w-7xl mx-auto px-6">
         <section class="py-20">
-            <h2 class="text-5xl font-bold text-center mb-12">Your Trading Dashboard</h2>
-            <p class="text-center text-2xl text-gray-300 mb-12">Welcome, <span id="user-handle" class="text-green-400">@Legend</span></p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-gray-800 p-8 rounded-xl shadow-lg">
-                    <h3 class="text-2xl font-semibold mb-4">Account Overview</h3>
-                    <p class="text-gray-300">Total Balance: $<span id="user-balance" class="text-green-400">0</span></p>
-                    <p class="text-gray-300 mt-2">Active Accounts: <span id="active-accounts" class="text-green-400">0</span></p>
-                    <ul id="account-list" class="text-gray-300 mt-2 space-y-1"></ul>
+            <h2 class="text-5xl font-bold text-center mb-12">Dashboard</h2>
+            <div class="bg-gray-800 p-8 rounded-xl shadow-lg max-w-md mx-auto">
+                <h3 class="text-2xl font-semibold mb-4">Welcome, <span id="user-handle">User</span></h3>
+                <p class="text-gray-300">Balance: $<span id="user-balance">0</span></p>
+                <p class="text-gray-300 mt-2">Active Accounts: <span id="active-accounts">0</span></p>
+                <h4 class="text-xl font-semibold mt-4">Your Accounts</h4>
+                <ul id="account-list" class="text-gray-300 mt-2"></ul>
+                <div class="mt-6">
+                    <select id="account-size" class="w-full p-3 rounded bg-gray-700 border border-gray-600 text-white mb-4">
+                        <option value="50">50K Account ($250)</option>
+                        <option value="100">100K Account ($300)</option>
+                        <option value="150">150K Account ($350)</option>
+                    </select>
+                    <button id="buy-account" class="w-full bg-green-500 text-white py-3 rounded-full hover:bg-green-600">Buy Account</button>
                 </div>
-                <div class="bg-gray-800 p-8 rounded-xl shadow-lg">
-                    <h3 class="text-2xl font-semibold mb-4">Buy Accounts</h3>
-                    <div class="mb-4">
-                        <label class="block text-gray-300 mb-2">Select Account Size</label>
-                        <select id="account-size" class="w-full p-3 rounded bg-gray-700 border border-gray-600 text-white">
-                            <option value="50">$50K - $250</option>
-                            <option value="100">$100K - $300</option>
-                            <option value="150">$150K - $350</option>
-                        </select>
-                        <button id="buy-account" class="mt-2 w-full bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600">Buy Now</button>
-                    </div>
-                    <p class="text-gray-300">Ready to trade? <a href="../Trading/index.html" class="text-green-400 hover:underline">Go to Trading Platform</a></p>
-                </div>
+                <a href="http://localhost:8001/index.html" class="block mt-6 w-full bg-blue-500 text-white py-3 rounded-full hover:bg-blue-600 text-center">Go to Trading Platform</a>
             </div>
         </section>
     </main>
     <script src="script.js"></script>
 </body>
 </html>
+<a href="http://localhost:8001/index.html?token=${localStorage.getItem('sessionToken')}" class="block mt-6 w-full bg-blue-500 text-white py-3 rounded-full hover:bg-blue-600 text-center">Go to Trading Platform</a>

@@ -193,3 +193,110 @@ function updateUserData() {
     localStorage.setItem('users', JSON.stringify(users));
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
 }
+const API_URL = 'http://localhost:5000';
+const PLATFORM_URL = 'http://localhost:8000';
+
+if (document.getElementById('login-form')) {
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+
+        const response = await fetch(`${API_URL}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (response.ok) {
+            localStorage.setItem('sessionToken', data.token);
+            alert('Logged in! Welcome back.');
+            window.location.href = 'dashboard.html';
+        } else {
+            document.getElementById('login-error').style.display = 'block';
+        }
+    });
+}
+const API_URL = 'http://localhost:5000';
+const PLATFORM_URL = 'http://localhost:8000';
+let token = localStorage.getItem('sessionToken');
+
+// Login Form
+if (document.getElementById('login-form')) {
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+
+        const response = await fetch(`${API_URL}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await response.json();
+        if (response.ok) {
+            localStorage.setItem('sessionToken', data.token);
+            localStorage.setItem('accounts', JSON.stringify(data.accounts));
+            localStorage.setItem('trades', JSON.stringify(data.trades));
+            alert('Logged in! Welcome back.');
+            window.location.href = `${PLATFORM_URL}/dashboard.html`;
+        } else {
+            document.getElementById('login-error').style.display = 'block';
+        }
+    });
+}
+
+// Dashboard
+if (window.location.pathname.includes('dashboard.html')) {
+    if (!token) {
+        window.location.href = `${PLATFORM_URL}/login.html`;
+    } else {
+        fetch(`${API_URL}/get_user`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token })
+        }).then(res => res.json()).then(data => {
+            if (data.error) {
+                localStorage.removeItem('sessionToken');
+                window.location.href = `${PLATFORM_URL}/login.html`;
+            } else {
+                document.getElementById('user-handle').textContent = data.handle;
+                document.getElementById('user-balance').textContent = data.balance;
+                document.getElementById('active-accounts').textContent = data.accounts.length;
+                const accountList = document.getElementById('account-list');
+                accountList.innerHTML = data.accounts.length 
+                    ? data.accounts.map(a => `<li>$${a.size}K (Bought: ${new Date(a.purchased).toLocaleDateString()})</li>`).join('') 
+                    : '<li>No accounts yet</li>';
+
+                document.getElementById('buy-account').addEventListener('click', async () => {
+                    const size = parseInt(document.getElementById('account-size').value);
+                    const response = await fetch(`${API_URL}/buy-account`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token, size })
+                    });
+                    const buyData = await response.json();
+                    if (response.ok) {
+                        localStorage.setItem('accounts', JSON.stringify(buyData.accounts));
+                        alert(`Bought a $${size}K account!`);
+                        document.getElementById('user-balance').textContent = buyData.balance;
+                        document.getElementById('active-accounts').textContent = buyData.accounts.length;
+                        accountList.innerHTML = buyData.accounts.map(a => `<li>$${a.size}K (Bought: ${new Date(a.purchased).toLocaleDateString()})</li>`).join('');
+                    } else {
+                        alert(buyData.error);
+                    }
+                });
+            }
+        });
+    }
+}
+
+// Logout
+if (document.getElementById('logout-link')) {
+    document.getElementById('logout-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('sessionToken');
+        alert('Logged out successfully');
+        window.location.href = `${PLATFORM_URL}/login.html`;
+    });
+}
