@@ -18,7 +18,7 @@
             height: calc(100% - 64px);
         }
         #nq-chart {
-            min-height: 600px;
+            min-height: 400px;
             min-width: 800px;
         }
     </style>
@@ -42,7 +42,7 @@
     </header>
 
     <main class="pt-16 h-screen flex">
-        <div class="flex-1 p-4">
+        <div class="flex-1 p-4 flex flex-col">
             <div class="flex justify-between items-center mb-2">
                 <h2 class="text-lg font-semibold">NQH25 (Nasdaq Futures)</h2>
                 <div class="flex gap-2 text-sm">
@@ -51,9 +51,29 @@
                     <button class="timeframe-btn bg-gray-700 px-2 py-1 rounded" data-interval="15m">15m</button>
                     <button class="timeframe-btn bg-gray-700 px-2 py-1 rounded" data-interval="30m">30m</button>
                     <button class="timeframe-btn bg-gray-700 px-2 py-1 rounded" data-interval="1h">1h</button>
+                    <button id="toggle-ma-btn" class="bg-gray-700 px-2 py-1 rounded">Show Moving Average</button>
                 </div>
             </div>
-            <div id="nq-chart" class="w-full h-[calc(100vh-150px)] rounded-lg border border-gray-600"></div>
+            <div id="nq-chart" class="w-full h-[calc(100vh-300px)] rounded-lg border border-gray-600"></div>
+            <div class="mt-4">
+                <h3 class="text-lg font-semibold mb-2">Trade History</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-gray-800 rounded">
+                        <thead>
+                            <tr class="text-left text-sm text-gray-400">
+                                <th class="p-2">Contract</th>
+                                <th class="p-2">Action</th>
+                                <th class="p-2">Amount</th>
+                                <th class="p-2">Profit</th>
+                                <th class="p-2">Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trade-history-table" class="text-sm">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <div class="w-64 bg-gray-800 p-4 flex flex-col gap-4">
@@ -81,8 +101,12 @@
                 <button id="sell-btn" class="flex-1 bg-red-500 py-2 rounded hover:bg-red-600">Sell</button>
             </div>
             <div class="text-sm text-gray-400">
-                <p>Position: <span id="current-position">None</span></p>
-                <p>Unrealized P&L: $<span id="unrealized-pnl-panel">0</span></p>
+                <h4 class="text-lg font-semibold">Current Position</h4>
+                <div id="current-position-details">
+                    <p>Position: <span id="current-position">None</span></p>
+                    <p>Entry Price: $<span id="entry-price">0</span></p>
+                    <p>Unrealized P&L: $<span id="unrealized-pnl-panel">0</span></p>
+                </div>
             </div>
             <button id="close-position" class="bg-gray-600 py-2 rounded hover:bg-gray-500">Close Position</button>
         </div>
