@@ -2,14 +2,13 @@ from flask import Flask
 from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
 import logging
-from config import Config
 
 db = SQLAlchemy()
 socketio = SocketIO(cors_allowed_origins="*")
 
-def create_app():
+def create_app(config):
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(config)
 
     db.init_app(app)
     socketio.init_app(app)
@@ -17,11 +16,9 @@ def create_app():
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-    # Use absolute imports from the trading_logic package
     from trading_logic.routes.accounts import accounts_bp
     from trading_logic.routes.trades import trades_bp
     from trading_logic.routes.stats import stats_bp
-
     app.register_blueprint(accounts_bp, url_prefix='/api')
     app.register_blueprint(trades_bp, url_prefix='/api')
     app.register_blueprint(stats_bp, url_prefix='/api')
