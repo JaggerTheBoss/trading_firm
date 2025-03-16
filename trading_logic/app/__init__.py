@@ -6,9 +6,9 @@ import logging
 db = SQLAlchemy()
 socketio = SocketIO(cors_allowed_origins="*")
 
-def create_app(config):
+def create_app(config_obj):
     app = Flask(__name__)
-    app.config.from_object(config)
+    app.config.from_object(config_obj)
 
     db.init_app(app)
     socketio.init_app(app)
@@ -20,6 +20,7 @@ def create_app(config):
     from trading_logic.routes.trades import trades_bp
     from trading_logic.routes.stats import stats_bp
     app.register_blueprint(accounts_bp, url_prefix='/api')
+    app.register_blueprint(accounts_bp, url_prefix='/accounts')
     app.register_blueprint(trades_bp, url_prefix='/api')
     app.register_blueprint(stats_bp, url_prefix='/api')
 
