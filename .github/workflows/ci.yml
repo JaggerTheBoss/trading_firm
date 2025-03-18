@@ -1,0 +1,29 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    # Server tests
+    - name: Build server
+      run: |
+        cd server
+        npm install
+        npm run test  # or npm run devtest or whatever test command
+
+    # Client tests
+    - name: Build client
+      run: |
+        cd client
+        npm install
+        npm run test  # e.g. React test suite
+
+    # Docker build
+    - name: Docker Build
+      run: |
+        docker compose build
